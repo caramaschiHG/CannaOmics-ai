@@ -125,6 +125,9 @@ convention = "numpy"
 known-first-party = ["cannaomics"]
 
 [tool.ruff.lint.per-file-ignores]
+# Typer/Click idiomatically use `typer.Option(...)` as a default argument
+# value; B008 cannot distinguish this legitimate pattern from real bugs.
+"cannaomics/cli.py" = ["B008"]
 "tests/**/*.py" = ["S101", "D"]
 "notebooks/**/*.py" = ["E402", "T201", "D"]
 

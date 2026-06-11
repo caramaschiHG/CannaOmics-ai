@@ -11,7 +11,6 @@ logger = get_logger("interpretability_plots")
 
 try:
     import plotly.express as px
-    import plotly.graph_objects as go
 
     PLOTLY_AVAILABLE = True
 except ImportError:

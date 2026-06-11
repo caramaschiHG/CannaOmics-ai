@@ -191,7 +191,7 @@ def select_features(
     Parameters
     ----------
     X : pd.DataFrame
-        Feature matrix (samples × features).
+        Feature matrix (samples x features).
     y : pd.Series
         Target labels (used for future supervised methods; currently
         unused for ``'variance'`` method).

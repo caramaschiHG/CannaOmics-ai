@@ -1,5 +1,6 @@
 """Gene annotation mapping for variants."""
 
+from __future__ import annotations
 
 import pandas as pd
 
@@ -9,8 +10,7 @@ from .genes import GeneCatalog
 def annotate_nearest_gene(
     variant_df: pd.DataFrame, gene_catalog: GeneCatalog, window_bp: int = 50000
 ) -> pd.DataFrame:
-    """
-    Annotate variants with their nearest gene.
+    """Annotate variants with their nearest gene.
 
     For the MVP, this relies on a heuristic based on feature names,
     simulating what an actual genomic mapping pipeline would do.
@@ -27,8 +27,8 @@ def annotate_nearest_gene(
     Returns
     -------
     pd.DataFrame
-        The input DataFrame unmodified (since we use column names directly for the demo),
-        but in a real implementation this would map genomic coordinates to genes.
+        The input DataFrame unmodified (the MVP uses column names directly);
+        a real implementation would map genomic coordinates to genes.
     """
     # In a real pipeline, this would:
     # 1. Load VCF
@@ -38,12 +38,12 @@ def annotate_nearest_gene(
 
     # For the MVP, our synthetic features are pre-named
     # (e.g., 'TPS_region_snp_001'). We simulate the output.
+    _ = (gene_catalog, window_bp)  # Reserved for real implementation.
     return variant_df
 
 
 def classify_variant_region(variant_id: str, gene_catalog: GeneCatalog) -> str:
-    """
-    Classify a variant's genomic region relative to a gene.
+    """Classify a variant's genomic region relative to a gene.
 
     Parameters
     ----------
@@ -55,9 +55,11 @@ def classify_variant_region(variant_id: str, gene_catalog: GeneCatalog) -> str:
     Returns
     -------
     str
-        Region classification: 'intergenic', 'upstream', 'downstream', 'intron', 'exon', 'utr'.
+        Region classification: one of ``"intergenic"``, ``"upstream"``,
+        ``"downstream"``, ``"intron"``, ``"exon"``, ``"utr"``.
     """
     # Simulated logic for MVP based on variant_id string
+    _ = gene_catalog  # Reserved for real implementation.
     vid_lower = variant_id.lower()
 
     if "exon" in vid_lower:

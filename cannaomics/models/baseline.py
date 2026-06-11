@@ -1,5 +1,7 @@
 """Baseline ML models for chemotype prediction."""
 
+from __future__ import annotations
+
 from collections.abc import Callable
 from typing import Any
 
@@ -15,25 +17,33 @@ except ImportError:
     XGB_AVAILABLE = False
 
 
-def get_dummy_model(params: dict[str, Any] = None) -> DummyClassifier:
+def get_dummy_model(params: dict[str, Any] | None = None) -> DummyClassifier:
     """Get a stratified dummy classifier as an absolute baseline."""
-    default_params = {"strategy": "stratified", "random_state": 42}
+    default_params: dict[str, Any] = {"strategy": "stratified", "random_state": 42}
     if params:
         default_params.update(params)
     return DummyClassifier(**default_params)
 
 
-def get_logistic_regression(params: dict[str, Any] = None) -> LogisticRegression:
+def get_logistic_regression(
+    params: dict[str, Any] | None = None,
+) -> LogisticRegression:
     """Get a configured Logistic Regression model."""
-    default_params = {"max_iter": 1000, "class_weight": "balanced", "random_state": 42}
+    default_params: dict[str, Any] = {
+        "max_iter": 1000,
+        "class_weight": "balanced",
+        "random_state": 42,
+    }
     if params:
         default_params.update(params)
     return LogisticRegression(**default_params)
 
 
-def get_random_forest(params: dict[str, Any] = None) -> RandomForestClassifier:
+def get_random_forest(
+    params: dict[str, Any] | None = None,
+) -> RandomForestClassifier:
     """Get a configured Random Forest model."""
-    default_params = {
+    default_params: dict[str, Any] = {
         "n_estimators": 500,
         "max_depth": 6,
         "class_weight": "balanced",
@@ -45,9 +55,9 @@ def get_random_forest(params: dict[str, Any] = None) -> RandomForestClassifier:
     return RandomForestClassifier(**default_params)
 
 
-def get_elastic_net(params: dict[str, Any] = None) -> SGDClassifier:
+def get_elastic_net(params: dict[str, Any] | None = None) -> SGDClassifier:
     """Get an Elastic Net model (via SGDClassifier)."""
-    default_params = {
+    default_params: dict[str, Any] = {
         "loss": "log_loss",  # Logistic regression
         "penalty": "elasticnet",
         "class_weight": "balanced",
@@ -59,14 +69,14 @@ def get_elastic_net(params: dict[str, Any] = None) -> SGDClassifier:
     return SGDClassifier(**default_params)
 
 
-def get_xgboost(params: dict[str, Any] = None):
+def get_xgboost(params: dict[str, Any] | None = None) -> Any:
     """Get an XGBoost classifier if available."""
     if not XGB_AVAILABLE:
         raise ImportError(
             "xgboost is not installed. Please install it with pip install xgboost"
         )
 
-    default_params = {
+    default_params: dict[str, Any] = {
         "n_estimators": 200,
         "max_depth": 4,
         "learning_rate": 0.05,
@@ -79,7 +89,7 @@ def get_xgboost(params: dict[str, Any] = None):
 
 
 # Registry of available baseline models
-MODEL_REGISTRY: dict[str, Callable] = {
+MODEL_REGISTRY: dict[str, Callable[..., Any]] = {
     "dummy": get_dummy_model,
     "logistic_regression": get_logistic_regression,
     "random_forest": get_random_forest,
@@ -88,9 +98,8 @@ MODEL_REGISTRY: dict[str, Callable] = {
 }
 
 
-def get_model(name: str, params: dict[str, Any] = None):
-    """
-    Factory function to get a model by name.
+def get_model(name: str, params: dict[str, Any] | None = None) -> Any:
+    """Factory function to get a model by name.
 
     Parameters
     ----------

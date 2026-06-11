@@ -108,7 +108,7 @@ flowchart TD
     end
 
     subgraph Output ["Insights Biológicos"]
-        RANK["Raking de Candidatos"]
+        RANK["Ranking de Candidatos"]
         REP["Relatório em Markdown"]
     end
 
@@ -126,18 +126,18 @@ flowchart TD
 
 ## 🗺️ Roadmap de Desenvolvimento
 
-Nós dividimos a expansão do CannaOmics AI em fases modulares para garantir integridade científica.
+A expansão do CannaOmics AI segue fases modulares para garantir integridade científica. Veja [`ROADMAP.md`](ROADMAP.md) para o detalhe canônico.
 
 | Fase | Título | Status | Objetivo Principal |
 |:---:|:---|:---:|:---|
-| **0** | **Fundação e Estrutura MVP** | ✅ | Esqueleto do CLI, infraestrutura de classes, demo pipeline mockada. |
-| **1** | **Ingestão Genômica (VCF/BED)** | 🔄 | Parser eficiente de variantes genéticas e metadados; integração básica biopython/scikit-allel. |
-| **2** | **Ingestão Química e Quimiotipos** | ⬜ | Módulo para perfis químicos (*Watts 2021*) e categorização por dominância e thresholds. |
-| **3** | **Matriz de Features e Limpeza** | ⬜ | Alinhamento e integração das matrizes químicas e genéticas (lidar com missing data). |
-| **4** | **Treinamento e Avaliação de Modelos** | ⬜ | Pipeline de Machine Learning para prever um alvo químico usando Random Forest/Logistic Regression. |
-| **5** | **Interpretabilidade (SHAP e Permutation)** | ⬜ | Analisar quais variantes (SNPs em TPS, etc.) foram essenciais para o modelo. |
-| **6** | **Geração de Relatório** | ⬜ | Relatório Markdown consolidando métricas, features candidatas e distribuição de dados. |
-| **7** | **Revisão e Documentação Final** | ⬜ | Refinamento de código, testes unitários para a pipeline completa e publicação das releases. |
+| **0** | **Repo Setup** | ✅ | Fundação, documentação, CI/CD, scaffold do projeto. |
+| **1** | **Dataset & Baseline MVP** | 🔄 | Mini-dataset sintético, normalização química, modelos baseline e geração automática de relatório (`cannaomics demo`). |
+| **2** | **Public Data Integration** | ⬜ | Ingestão de dados públicos reais (e.g. Dryad *Watts 2021*) e construção das matrizes de features de verdade. |
+| **3** | **Terpene Synthase (TPS) Focus** | ⬜ | Tabela curada de genes CsTPS, mapeamento variant→gene window, modelo focado em alvos terpênicos. |
+| **4** | **Cannabinoid Pathway Focus** | ⬜ | Mapeamento THCAS/CBDAS/CBCAS, classificação de quimiotipo (THC/CBD dominante). |
+| **5** | **Deep Interpretability** | ⬜ | Permutation importance, SHAP e engine de ranking de candidatos. |
+| **6** | **Public Demo & Polish** | ⬜ | Relatórios visuais aprimorados, experiência de CLI polida, dependências otimizadas. |
+| **7** | **Preprint / Technical Report** | ⬜ | Publicação da metodologia e dos achados iniciais do baseline. |
 
 ---
 

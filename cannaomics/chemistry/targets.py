@@ -10,6 +10,11 @@ Examples
 >>> info.display_name
 'β-Myrcene'
 """
+# Greek letters and the Δ symbol below are intentional scientific notation
+# used purely in human-readable ``display_name`` fields. They are not used in
+# string identifiers, so ambiguous-unicode warnings are silenced for this
+# file.
+# ruff: noqa: RUF001
 
 from __future__ import annotations
 

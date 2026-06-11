@@ -46,7 +46,7 @@ def aggregate_by_gene(
     Returns
     -------
     pd.DataFrame
-        Gene-level feature matrix (samples × genes).
+        Gene-level feature matrix (samples x genes).
 
     Raises
     ------
@@ -110,7 +110,7 @@ def aggregate_by_gene(
             )
 
     result = pd.DataFrame(gene_features, index=variant_df.index)
-    logger.info("Gene feature matrix: %d samples × %d genes", *result.shape)
+    logger.info("Gene feature matrix: %d samples x %d genes", *result.shape)
 
     return result
 
@@ -142,7 +142,7 @@ def compute_gene_window_features(
     Returns
     -------
     pd.DataFrame
-        Gene-window feature matrix (samples × genes) where each value is
+        Gene-window feature matrix (samples x genes) where each value is
         the sum of variant alleles within the window.
 
     Raises
@@ -209,7 +209,7 @@ def compute_gene_window_features(
 
     result = pd.DataFrame(gene_window_features, index=variant_df.index)
     logger.info(
-        "Gene-window features: %d samples × %d genes (window=%d bp)",
+        "Gene-window features: %d samples x %d genes (window=%d bp)",
         *result.shape,
         window_bp,
     )
@@ -229,7 +229,7 @@ def compute_pathway_features(
     Parameters
     ----------
     gene_features : pd.DataFrame
-        Gene-level feature matrix (samples × genes).
+        Gene-level feature matrix (samples x genes).
     pathway_map : dict[str, list[str]]
         Mapping from pathway name to list of gene IDs belonging to
         that pathway.
@@ -237,7 +237,7 @@ def compute_pathway_features(
     Returns
     -------
     pd.DataFrame
-        Pathway-level feature matrix (samples × pathways).
+        Pathway-level feature matrix (samples x pathways).
     """
     pathway_features: dict[str, pd.Series] = {}
 
@@ -263,6 +263,6 @@ def compute_pathway_features(
         )
 
     result = pd.DataFrame(pathway_features, index=gene_features.index)
-    logger.info("Pathway features: %d samples × %d pathways", *result.shape)
+    logger.info("Pathway features: %d samples x %d pathways", *result.shape)
 
     return result

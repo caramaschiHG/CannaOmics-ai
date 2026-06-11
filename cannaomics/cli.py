@@ -16,6 +16,8 @@ Usage
 
 from __future__ import annotations
 
+import contextlib
+import sys
 from pathlib import Path
 
 import typer
@@ -25,14 +27,29 @@ from rich.panel import Panel
 from cannaomics import __version__
 
 # ---------------------------------------------------------------------------
+# Windows console hardening
+# ---------------------------------------------------------------------------
+# Windows defaults stdout to cp1252, which crashes on non-BMP unicode (e.g.
+# the 🧬 emoji used in CLI panels). Force UTF-8 when available so help text
+# and rich panels render consistently across platforms.
+if sys.platform == "win32":  # pragma: no cover - platform-specific
+    for _stream in (sys.stdout, sys.stderr):
+        with contextlib.suppress(AttributeError, ValueError):
+            _stream.reconfigure(encoding="utf-8")
+
+# ---------------------------------------------------------------------------
 # Console & application
 # ---------------------------------------------------------------------------
 
-console = Console()
+console = Console(
+    # Force VT100/ANSI rendering on Windows so non-BMP unicode (e.g. 🧬)
+    # does not crash on legacy cp1252 consoles.
+    legacy_windows=False if sys.platform == "win32" else None,
+)
 
 app = typer.Typer(
     name="cannaomics",
-    help="[bold green]🧬 CannaOmics AI[/] — Cannabis genotype-to-chemotype analysis.",
+    help="CannaOmics AI - Cannabis sativa genotype-to-chemotype analysis.",
     rich_markup_mode="rich",
     no_args_is_help=True,
     add_completion=False,
@@ -55,7 +72,7 @@ def _version_callback(value: bool) -> None:
     if value:
         console.print(
             Panel(
-                f"[bold cyan]🧬 CannaOmics AI[/]  v{__version__}",
+                f"[bold cyan]CannaOmics AI[/]  v{__version__}",
                 border_style="bright_green",
                 expand=False,
             )
@@ -74,7 +91,7 @@ def main(
         is_eager=True,
     ),
 ) -> None:
-    """🧬 CannaOmics AI — Cannabis genotype-to-chemotype analysis."""
+    """CannaOmics AI - Cannabis sativa genotype-to-chemotype analysis."""
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +109,8 @@ def demo() -> None:
     console.print(
         Panel(
             f"[bold cyan]CannaOmics AI[/]  v{__version__}\n"
-            "[dim]Open-source framework for Cannabis genotype-to-chemotype analysis.[/]",
+            "[dim]Open-source framework for "
+            "Cannabis genotype-to-chemotype analysis.[/]",
             border_style="cyan",
             expand=False,
         )
@@ -103,15 +121,15 @@ def demo() -> None:
         from cannaomics.demo import run_demo  # type: ignore[import-untyped]
 
         run_demo()
-    except ImportError:
+    except ImportError as exc:
         console.print(
             "[bold red]Error:[/] Demo module not yet installed. "
             "Run [bold]pip install cannaomics\\[demo][/] first."
         )
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
     except Exception as exc:
         console.print(f"[bold red]Pipeline failed:[/] {exc}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
 
 @app.command()
@@ -135,7 +153,8 @@ def run(
     """
     console.print(
         Panel(
-            f"[bold cyan]🧬 CannaOmics AI[/]  v{__version__}\n[dim]Config:[/] {config}",
+            f"[bold cyan]CannaOmics AI[/]  v{__version__}\n"
+            f"[dim]Config:[/] {config}",
             border_style="bright_green",
             expand=False,
         )
@@ -147,14 +166,15 @@ def run(
 
         pipeline_cfg = load_config(config)
         console.print(
-            f"[green]✓[/] Configuration loaded: [bold]{pipeline_cfg.project.name}[/]"
+            f"[green]OK[/] Configuration loaded: "
+            f"[bold]{pipeline_cfg.project.name}[/]"
         )
 
         # Pipeline execution would be dispatched here
-        console.print("[yellow]⚠  Full pipeline runner not yet implemented.[/]")
+        console.print("[yellow]WARN[/] Full pipeline runner not yet implemented.")
     except Exception as exc:
         console.print(f"[bold red]Pipeline failed:[/] {exc}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
 
 @app.command()
@@ -186,7 +206,7 @@ def train(
     """
     console.print(
         Panel(
-            f"[bold cyan]🧬 CannaOmics AI[/]  v{__version__}\n"
+            f"[bold cyan]CannaOmics AI[/]  v{__version__}\n"
             f"[dim]Config:[/] {config}\n"
             f"[dim]Target:[/] {target}",
             border_style="bright_green",
@@ -199,15 +219,16 @@ def train(
 
         pipeline_cfg = load_config(config)
         console.print(
-            f"[green]✓[/] Configuration loaded: [bold]{pipeline_cfg.project.name}[/]"
+            f"[green]OK[/] Configuration loaded: "
+            f"[bold]{pipeline_cfg.project.name}[/]"
         )
-        console.print(f"[green]✓[/] Target compound: [bold]{target}[/]")
+        console.print(f"[green]OK[/] Target compound: [bold]{target}[/]")
 
         # Model training would be dispatched here
-        console.print("[yellow]⚠  Model trainer not yet implemented.[/]")
+        console.print("[yellow]WARN[/] Model trainer not yet implemented.")
     except Exception as exc:
         console.print(f"[bold red]Training failed:[/] {exc}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
 
 @app.command()
@@ -247,7 +268,8 @@ def report(
     source = run_id if run_id else str(results_dir)
     console.print(
         Panel(
-            f"[bold cyan]🧬 CannaOmics AI[/]  v{__version__}\n[dim]Source:[/] {source}",
+            f"[bold cyan]CannaOmics AI[/]  v{__version__}\n"
+            f"[dim]Source:[/] {source}",
             border_style="bright_green",
             expand=False,
         )
@@ -255,10 +277,10 @@ def report(
 
     try:
         # Report generation would be dispatched here
-        console.print("[yellow]⚠  Report generator not yet implemented.[/]")
+        console.print("[yellow]WARN[/] Report generator not yet implemented.")
     except Exception as exc:
         console.print(f"[bold red]Report generation failed:[/] {exc}")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from exc
 
 
 # ---------------------------------------------------------------------------

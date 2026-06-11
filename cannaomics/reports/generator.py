@@ -1,10 +1,14 @@
 """Report generator."""
 
+from __future__ import annotations
+
 from datetime import datetime
 from pathlib import Path
 
 import jinja2
 import pandas as pd
+
+from cannaomics import __version__
 
 from ..utils.logging import get_logger
 from .templates import MARKDOWN_TEMPLATE
@@ -21,7 +25,7 @@ class ReportGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # Setup Jinja2 environment
-        self.env = jinja2.Environment()
+        self.env = jinja2.Environment(autoescape=False, keep_trailing_newline=True)
 
     def generate_markdown(
         self,
@@ -32,9 +36,7 @@ class ReportGenerator:
         metrics: dict[str, float],
         candidates_df: pd.DataFrame,
     ) -> Path:
-        """
-        Generate a Markdown report.
-        """
+        """Generate a Markdown report and write it to ``self.output_dir``."""
         template = self.env.from_string(MARKDOWN_TEMPLATE)
 
         # Prepare data
@@ -49,12 +51,11 @@ class ReportGenerator:
             model_name=model_name,
             metrics=metrics,
             top_candidates=top_candidates,
-            version="0.1.0",
+            version=__version__,
         )
 
         report_path = self.output_dir / f"report_{self.run_id}.md"
-        with open(report_path, "w", encoding="utf-8") as f:
-            f.write(rendered)
+        report_path.write_text(rendered, encoding="utf-8")
 
-        logger.info(f"Markdown report generated at {report_path}")
+        logger.info("Markdown report generated at %s", report_path)
         return report_path

@@ -98,8 +98,10 @@ def get_model_importance(model: Any, feature_names: list) -> pd.DataFrame:
 def compute_stable_importance(
     model: Any, X: pd.DataFrame, y: pd.Series, n_splits: int = 5
 ) -> pd.DataFrame:
+    """Compute average importance across CV folds.
+
+    Placeholder for MVP - currently delegates to permutation importance on
+    the full dataset; will be extended to aggregate per-fold importances.
     """
-    Compute average importance across CV folds.
-    (Placeholder for MVP - currently just delegates to permutation importance on full dataset).
-    """
+    _ = n_splits  # Reserved for real CV-based implementation.
     return compute_permutation_importance(model, X, y)

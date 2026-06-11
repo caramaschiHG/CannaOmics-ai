@@ -93,7 +93,7 @@ def filter_variants(
     keep_cols_maf = maf[maf >= min_maf].index
 
     final_cols = (
-        ["sample_id"] + list(keep_cols_maf)
+        ["sample_id", *list(keep_cols_maf)]
         if "sample_id" in df.columns
         else list(keep_cols_maf)
     )

@@ -120,7 +120,7 @@ def save_features(
     logger.info("Saving feature set to %s", output_dir)
 
     X.to_parquet(features_path, index=True)
-    logger.debug("Wrote features: %s (%d × %d)", features_path, *X.shape)
+    logger.debug("Wrote features: %s (%d x %d)", features_path, *X.shape)
 
     y_df = y.to_frame(name=y.name or "target")
     y_df.to_parquet(target_path, index=True)
@@ -178,7 +178,7 @@ def load_features(
     logger.info("Loading feature set from %s", input_dir)
 
     X = pd.read_parquet(features_path)
-    logger.debug("Loaded features: %d × %d", *X.shape)
+    logger.debug("Loaded features: %d x %d", *X.shape)
 
     y_df = pd.read_parquet(target_path)
     y = y_df.iloc[:, 0]

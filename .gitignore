@@ -87,3 +87,4 @@ site/
 *.log
 *.tmp
 .planning/
+.sisyphus/

@@ -68,10 +68,7 @@ def evaluate_model(model: Any, X_test: pd.DataFrame, y_test: pd.Series) -> EvalR
     if hasattr(model, "predict_proba"):
         try:
             proba = model.predict_proba(X_test)
-            if proba.shape[1] == 2:
-                y_proba = proba[:, 1]
-            else:
-                y_proba = proba  # multiclass
+            y_proba = proba[:, 1] if proba.shape[1] == 2 else proba
         except Exception:
             pass
 
@@ -88,7 +85,7 @@ def evaluate_model(model: Any, X_test: pd.DataFrame, y_test: pd.Series) -> EvalR
 
     if y_proba is not None and is_binary:
         try:
-            # Need numeric labels for AUC usually, assume string labels like 'high'/'low'
+            # Need numeric labels for AUC; assume labels like 'high'/'low'.
             y_test_num = (y_test == model.classes_[1]).astype(int)
             roc_auc = roc_auc_score(y_test_num, y_proba)
             pr_auc = average_precision_score(y_test_num, y_proba)

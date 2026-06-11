@@ -1,1 +1,1 @@
-"""Chemistry module — compound definitions, normalization, and chemotype classification."""
+"""Chemistry module - compounds, normalization, and chemotype classification."""

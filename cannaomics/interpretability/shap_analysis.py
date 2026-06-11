@@ -53,10 +53,7 @@ def compute_shap_values(
 
     try:
         # Sample if dataset is large
-        if len(X) > max_samples:
-            X_sample = shap.sample(X, max_samples)
-        else:
-            X_sample = X
+        X_sample = shap.sample(X, max_samples) if len(X) > max_samples else X
 
         # Try TreeExplainer for forests/trees
         if type(model).__name__ in [

@@ -1,5 +1,8 @@
 """Model training and cross-validation orchestration."""
 
+from __future__ import annotations
+
+import contextlib
 import time
 from dataclasses import dataclass
 from typing import Any
@@ -32,10 +35,13 @@ class TrainResult:
 
 
 def cross_validate_model(
-    model: Any, X: pd.DataFrame, y: pd.Series, n_splits: int = 5, random_state: int = 42
+    model: Any,
+    X: pd.DataFrame,
+    y: pd.Series,
+    n_splits: int = 5,
+    random_state: int = 42,
 ) -> dict[str, list[float]]:
-    """
-    Perform stratified k-fold cross-validation.
+    """Perform stratified k-fold cross-validation.
 
     Parameters
     ----------
@@ -56,7 +62,7 @@ def cross_validate_model(
         Dictionary of metric arrays across folds.
     """
     # Define scorers
-    scoring = {
+    scoring: dict[str, Any] = {
         "accuracy": make_scorer(accuracy_score),
         "balanced_accuracy": make_scorer(balanced_accuracy_score),
         "f1": make_scorer(f1_score, average="weighted"),
@@ -64,19 +70,25 @@ def cross_validate_model(
 
     # Try to add ROC AUC if probabilities are supported
     if hasattr(model, "predict_proba"):
-        try:
-            # Basic try-catch in case of binary vs multiclass issues
+        with contextlib.suppress(Exception):
+            # Basic guard in case of binary-vs-multiclass mismatch
             scoring["roc_auc"] = make_scorer(
-                roc_auc_score, response_method="predict_proba", multi_class="ovr"
+                roc_auc_score,
+                response_method="predict_proba",
+                multi_class="ovr",
             )
-        except Exception:
-            pass
 
     cv = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
 
     # Run CV
     cv_results = cross_validate(
-        model, X, y, cv=cv, scoring=scoring, return_train_score=False, n_jobs=-1
+        model,
+        X,
+        y,
+        cv=cv,
+        scoring=scoring,
+        return_train_score=False,
+        n_jobs=-1,
     )
 
     # Clean up results dictionary (remove 'test_' prefix)
@@ -102,8 +114,7 @@ def train_model(
     n_splits: int = 5,
     random_state: int = 42,
 ) -> TrainResult:
-    """
-    Orchestrate full training and evaluation of a model.
+    """Orchestrate full training and evaluation of a model.
 
     Parameters
     ----------

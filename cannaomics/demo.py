@@ -1,6 +1,8 @@
 """Demonstration pipeline script."""
 
-import time
+from __future__ import annotations
+
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -24,7 +26,7 @@ logger = get_logger("demo")
 console = Console()
 
 
-def run_demo(config_path: Path = None):
+def run_demo(config_path: Path | None = None) -> None:
     """Run a complete end-to-end demonstration using synthetic data."""
     console.print(
         Panel.fit(
@@ -42,13 +44,11 @@ def run_demo(config_path: Path = None):
 
     chem_df = pd.read_csv(chem_path)
     var_df = pd.read_csv(var_path)
-    time.sleep(1)  # Fake loading time for UI
     console.print("[green]Data loaded![/green]")
 
     # 2. Chemistry Normalization & Chemotype Classification
     console.print("[dim]Classifying chemotypes...[/dim]")
     chem_df = classify_samples(chem_df)
-    time.sleep(0.5)
     console.print("[green]Chemotypes classified![/green]")
 
     # 3. Feature Matrix Construction
@@ -59,11 +59,11 @@ def run_demo(config_path: Path = None):
         chemical_df=chem_df.set_index("sample_id"),
         target_compound="THC",
     )
-    time.sleep(0.5)
     console.print("[green]Feature matrix built![/green]")
 
     console.print(
-        f"Data shape: [bold cyan]{X.shape[0]} samples[/bold cyan] × [bold cyan]{X.shape[1]} features[/bold cyan]"
+        f"Data shape: [bold cyan]{X.shape[0]} samples[/bold cyan] "
+        f"x [bold cyan]{X.shape[1]} features[/bold cyan]"
     )
 
     # 4. Model Training
@@ -84,7 +84,6 @@ def run_demo(config_path: Path = None):
     shap_df = get_top_shap_features(shap_res) if shap_res else None
 
     candidates_df = rank_candidates(importance_df, shap_df, catalog, top_n=5)
-    time.sleep(1)
     console.print("[green]Interpretability analysis complete![/green]")
 
     console.print("\n[bold]Top Candidate Genomic Features[/bold]")
@@ -115,20 +114,21 @@ def run_demo(config_path: Path = None):
 
     # Save model
     meta = ModelMetadata(
-        "demo_rf",
-        "random_forest",
-        "chemotype",
-        X.shape[1],
-        len(X),
-        eval_res.to_dict(),
-        "today",
+        model_name="demo_rf",
+        model_type="random_forest",
+        target_compound="chemotype",
+        n_features=X.shape[1],
+        n_samples=len(X),
+        metrics=eval_res.to_dict(),
+        training_date=datetime.now().isoformat(timespec="seconds"),
     )
     save_model(train_res.model, meta, out_dir / "models")
 
     console.print("[green]Run artifacts saved![/green]")
 
     console.print(
-        f"\n[bold green]Demo completed successfully![/bold green] Results saved to [cyan]{out_dir}[/cyan]"
+        f"\n[bold green]Demo completed successfully![/bold green] "
+        f"Results saved to [cyan]{out_dir}[/cyan]"
     )
 
 
