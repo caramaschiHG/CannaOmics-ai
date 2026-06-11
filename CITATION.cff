@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "CannaOmics AI"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Caramaschi"
+    given-names: "Sylvian"
+license: Apache-2.0
+repository-code: "https://github.com/caramaschiHG/CannaOmics-ai"
+url: "https://github.com/caramaschiHG/CannaOmics-ai"
+version: "0.1.0"
+date-released: "2025-06-11"
+keywords:
+  - cannabis
+  - bioinformatics
+  - chemotype
+  - terpenes
+  - cannabinoids
+  - machine-learning
+  - genomics
+abstract: >-
+  Open-source framework for reproducible Cannabis sativa
+  genotype-to-chemotype analysis. Integrates genomic,
+  transcriptomic, and chemical data to reproduce published
+  findings and generate testable hypotheses about genes,
+  variants, and patterns associated with terpene and
+  cannabinoid production.

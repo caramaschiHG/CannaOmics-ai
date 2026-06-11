@@ -1,0 +1,89 @@
+# ──────────────────────────────────────────────────────────────────────
+# CannaOmics AI – .gitignore
+# ──────────────────────────────────────────────────────────────────────
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+
+# ── Virtual environments ─────────────────────────────────────────────
+.env
+.venv/
+venv/
+ENV/
+
+# ── Testing & linting ────────────────────────────────────────────────
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# ── IDE ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS files ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Jupyter ──────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Data directories (keep structure via .gitkeep) ───────────────────
+data/raw/*
+data/interim/*
+data/processed/*.parquet
+data/processed/*.vcf*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+
+# ── Results (keep structure via .gitkeep) ────────────────────────────
+results/*
+!results/.gitkeep
+
+# ── Bioinformatics file formats ──────────────────────────────────────
+*.bam
+*.bam.bai
+*.vcf.gz
+*.vcf.gz.tbi
+*.fasta
+*.fa
+*.fq
+*.fastq
+*.fastq.gz
+*.sam
+*.bed
+*.bigwig
+*.bw
+
+# ── Large model artifacts ────────────────────────────────────────────
+*.pkl
+*.joblib
+*.h5
+*.hdf5
+models/*.pt
+models/*.onnx
+
+# ── Docs build ───────────────────────────────────────────────────────
+site/
+
+# ── Misc ─────────────────────────────────────────────────────────────
+*.log
+*.tmp
+.planning/

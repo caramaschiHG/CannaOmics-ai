@@ -1,0 +1,71 @@
+# ==========================================================================
+# CannaOmics AI — Default Pipeline Configuration
+# ==========================================================================
+# This file mirrors the PRD §18 example and serves as the reference
+# configuration for first-time users and the built-in demo.
+# ==========================================================================
+
+project:
+  name: "Cannabis Chemotype Predictor"
+  description: >-
+    Predict terpene and cannabinoid concentrations from Cannabis sativa
+    genomic variant data using interpretable machine-learning models.
+
+data:
+  dataset_id: "cannaomics_demo_v1"
+  chemical_profile_path: "data/chemical_profiles.csv"
+  variant_matrix_path: "data/variant_matrix.csv"
+  sample_metadata_path: "data/sample_metadata.csv"
+
+target:
+  compound: "beta_myrcene"
+  task: "classification"
+  threshold:
+    method: "median"
+    value: null
+    label_high: "high_myrcene"
+    label_low: "low_myrcene"
+
+features:
+  include:
+    - "*"
+  gene_families:
+    - "TPS"
+    - "cannabinoid_synthase"
+    - "MEP_pathway"
+  window_bp: 50000
+  missing_strategy: "median"
+
+model:
+  type: "random_forest"
+  params:
+    n_estimators: 500
+    max_depth: 8
+    min_samples_leaf: 5
+    class_weight: "balanced"
+    random_state: 42
+
+validation:
+  split: "stratified_kfold"
+  n_splits: 5
+  test_size: 0.2
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "roc_auc"
+    - "balanced_accuracy"
+
+interpretability:
+  methods:
+    - "feature_importance"
+    - "permutation_importance"
+    - "shap"
+  top_n_candidates: 25
+
+report:
+  output_dir: "results/reports"
+  formats:
+    - "markdown"
+    - "html"

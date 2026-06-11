@@ -1,0 +1,35 @@
+name: "CannaOmics Demo"
+description: "A demonstration pipeline using synthetic data to predict THC vs CBD dominance based on genomic features."
+
+data:
+  dataset_id: "demo_dataset_001"
+  chemical_profile_path: "examples/mini_chemical_profile.csv"
+  variant_matrix_path: "examples/mini_variant_matrix.csv"
+
+target:
+  compound: "chemotype"
+  task: "classification"
+
+features:
+  include: ["variants"]
+  gene_families: ["TPS", "Cannabinoid Synthase"]
+  window_bp: 50000
+  missing_strategy: "median"
+
+model:
+  type: "random_forest"
+  params:
+    n_estimators: 100
+    max_depth: 5
+
+validation:
+  split: "stratified_kfold"
+  n_splits: 3
+
+interpretability:
+  methods: ["permutation", "shap"]
+  top_n_candidates: 10
+
+report:
+  output_dir: "results/demo_run"
+  formats: ["markdown"]
