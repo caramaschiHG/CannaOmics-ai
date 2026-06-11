@@ -89,27 +89,27 @@ O coração do pipeline flui através de uma arquitetura limpa de processamento 
 ```mermaid
 flowchart TD
     subgraph Dados ["Input de Dados (YAML)"]
-        VCF[Matriz de Variantes\n.vcf / .parquet]
-        CHEM[Perfil Químico\n.csv]
-        META[Metadados\n.csv]
+        VCF["Matriz de Variantes\n.vcf / .parquet"]
+        CHEM["Perfil Químico\n.csv"]
+        META["Metadados\n.csv"]
     end
 
     subgraph Core ["Engine CannaOmics"]
-        NORM[Normalização de Compostos]
-        CHEMO[Classificação Quimiotípica]
-        GEN[Anotação de Genes / SNPs]
-        FEAT[Construção da Matriz de Features]
+        NORM["Normalização de Compostos"]
+        CHEMO["Classificação Quimiotípica"]
+        GEN["Anotação de Genes / SNPs"]
+        FEAT["Construção da Matriz de Features"]
     end
 
     subgraph ML ["Machine Learning"]
-        TRAIN[Treinamento de Modelos]
-        EVAL[Avaliação (CV)]
-        SHAP[Interpretabilidade (SHAP)]
+        TRAIN["Treinamento de Modelos"]
+        EVAL["Avaliação (CV)"]
+        SHAP["Interpretabilidade (SHAP)"]
     end
 
     subgraph Output ["Insights Biológicos"]
-        RANK[Raking de Candidatos]
-        REP[Relatório em Markdown]
+        RANK["Raking de Candidatos"]
+        REP["Relatório em Markdown"]
     end
 
     VCF --> GEN
