@@ -2,262 +2,156 @@
 
 # 🧬 CannaOmics AI
 
-### From genome to chemotype, reproducibly.
+### Do genoma ao quimiotipo, com método, código e evidência.
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/python-≥3.11-green.svg)](https://python.org)
 [![Tests](https://github.com/caramaschiHG/CannaOmics-ai/actions/workflows/tests.yml/badge.svg)](https://github.com/caramaschiHG/CannaOmics-ai/actions)
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
-**Open-source bioinformatics and machine learning framework for integrating genomic, transcriptomic, and chemical data from *Cannabis sativa* — reproducing published findings and generating testable hypotheses about genes, variants, and patterns associated with terpene and cannabinoid production.**
+**Um framework open-source de bioinformática e inteligência artificial dedicado à decodificação da *Cannabis sativa*. O CannaOmics AI integra dados genômicos, transcriptômicos e perfis químicos complexos para reproduzir pesquisas de ponta e gerar novas hipóteses testáveis sobre vias metabólicas, genes e a produção de terpenos e canabinoides.**
 
-[Scientific Background](#-scientific-scope) · [Quick Start](#-quick-start) · [Documentation](docs/) · [Roadmap](#-roadmap) · [Contributing](CONTRIBUTING.md)
+[O Problema](#-por-que-o-cannaomics-ai-existe) · [Capacidades](#-o-que-ele-faz) · [Quick Start](#-quick-start) · [Arquitetura](#-arquitetura) · [Roadmap](#-roadmap)
 
 </div>
 
 ---
 
-## 🌿 Why This Exists
+## 🌿 Por Que o CannaOmics AI Existe?
 
-Cannabis chemotype research has exploded in the last decade. Dozens of studies have identified genetic loci, terpene synthase families, and regulatory regions that shape the chemical profile of different cultivars. But there's a problem:
+A pesquisa sobre a genética da *Cannabis* sofre historicamente com dados fragmentados, pipelines não padronizados e estudos difíceis de reproduzir. Pesquisadores isolam variantes ligadas a terpenos em publicações independentes (como no mapeamento de *CsTPS*), mas transformar essas descobertas em **código reutilizável** e modelos preditivos em larga escala tem sido um gargalo.
 
-> **The data is fragmented, the methods are not standardized, and there is no unified, open-source pipeline to reproduce these results — let alone build on them.**
+O **CannaOmics AI** preenche esse vácuo. Não somos uma caixa-preta; somos um ecossistema transparente que transforma a intuição biológica em modelos matemáticos e de *machine learning* reprodutíveis.
 
-Published papers report findings using different genomes, annotation versions, statistical thresholds, and feature engineering strategies. Replicating even a single paper's analysis often requires weeks of manual effort.
+## ⚡ O Que Ele Faz
 
-**CannaOmics AI changes that.** It is a reproducible research framework that ingests public data, normalizes it, and applies both classical bioinformatics and machine learning to systematically explore genotype–chemotype relationships.
+- 🧬 **Mapeamento de Variantes**: Alinha SNPs e InDels de genomas inteiros (*WGS*) em torno de famílias gênicas chave.
+- ⚗️ **Análise Quimiotípica**: Processa perfis complexos de metabólitos secundários e padroniza quimiotipos.
+- 🧠 **Machine Learning**: Treina modelos (Random Forest, XGBoost, Elastic Net) para prever a presença de canabinoides e terpenos baseando-se estritamente na assinatura genômica.
+- 🔬 **Interpretabilidade Biológica**: Utiliza valores de SHAP e Permutation Importance para ranquear variantes candidatas, ligando o peso do algoritmo de volta ao contexto biológico (ex: regiões promotoras do *THCAS*).
+- 📊 **Geração de Relatórios Automáticos**: Compila os achados em relatórios Markdown/HTML ricos e reprodutíveis.
+- 🧪 **Pipelines Customizáveis**: Configuração baseada puramente em arquivos YAML, sem hardcoding.
 
----
-
-## ⚡ What It Does
-
-- 🧬 **Genomic variant analysis** — Ingests VCF/FASTA data, annotates variants in known terpene synthase and cannabinoid biosynthesis gene families
-- 📊 **Transcriptome integration** — Normalizes RNA-seq expression data across studies and tissue types
-- 🧪 **Chemical profile linking** — Maps chemotyping data (GC-MS, HPLC) to genomic features
-- 🤖 **ML-powered hypothesis generation** — Trains interpretable models (Random Forest, XGBoost + SHAP) to rank candidate genes and variants
-- 📋 **Automated reporting** — Generates publication-ready HTML reports with interactive visualizations
-- 🔄 **Full reproducibility** — Every analysis step is logged, versioned, and re-runnable from a single manifest
-
----
-
-## 🚫 What It Does NOT Do
-
-> CannaOmics AI is a **research tool**, not a product or advisory service.
-
-- 🚫 **No cultivation advice** — This is genomics software, not a grow guide
-- 🚫 **No medical claims** — Outputs are statistical hypotheses, not clinical recommendations
-- 🚫 **No proprietary data** — Uses only publicly available datasets and published research
-- 🚫 **No strain optimization** — Does not design or recommend cultivar breeding strategies
+### 🚫 O Que Ele NÃO Faz
+- Não analisa dados humanos nem perfis de pacientes.
+- Não faz cruzamentos agronômicos práticos nem gerencia estufas.
+- Não emite alegações médicas ou terapêuticas.
+- Não apoia nem facilita qualquer violação da legislação local sobre *Cannabis*.
 
 ---
 
 ## 🚀 Quick Start
 
-```bash
-# Install core framework
-pip install cannaomics
+### 1. Instalação
 
-# Install with all optional dependencies
-pip install "cannaomics[all]"
-
-# Run the demo pipeline
-cannaomics demo --output results/demo/
-```
-
-For development:
+O framework exige o **Python 3.11+**.
 
 ```bash
-# Clone the repository
+# Clone o repositório
 git clone https://github.com/caramaschiHG/CannaOmics-ai.git
 cd CannaOmics-ai
 
-# Create a virtual environment
-python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-
-# Install in development mode with all extras
-pip install -e ".[all]"
-pip install -r requirements-dev.txt  # or: pip install --dependency-groups dev,docs
+# Instale o core package e dependências de Data Science
+pip install -e ".[ml,plotting]"
 ```
 
----
+> **Nota para Bioinformática:** Se for rodar a pipeline pesada de genômica que depende de VCFs/BAMs nativos (ex: `pysam`), recomendamos instalar a flag completa `pip install -e ".[all]"` utilizando um ambiente Linux ou WSL.
 
-## 🔬 Scientific Scope
+### 2. Rodando a Pipeline de Demonstração
 
-CannaOmics AI focuses on reproducing and extending published findings for the following compound families.
-
-### Target Terpenes
-
-| Terpene | Class | Aroma Profile | Key Gene Families |
-|:--|:--|:--|:--|
-| **Myrcene** | Monoterpene | Earthy, musky | *TPS* (TPS-b) |
-| **Limonene** | Monoterpene | Citrus | *TPS* (TPS-b) |
-| **α-Pinene** | Monoterpene | Pine, sharp | *TPS* (TPS-b) |
-| **β-Caryophyllene** | Sesquiterpene | Peppery, woody | *TPS* (TPS-a) |
-| **Linalool** | Monoterpene | Floral, lavender | *TPS* (TPS-b, TPS-g) |
-| **Humulene** | Sesquiterpene | Hoppy, earthy | *TPS* (TPS-a) |
-| **Terpinolene** | Monoterpene | Herbal, fresh | *TPS* (TPS-b) |
-| **Ocimene** | Monoterpene | Sweet, herbal | *TPS* (TPS-b, TPS-g) |
-
-### Target Cannabinoids
-
-| Cannabinoid | Precursor | Key Enzymes | Biosynthetic Pathway |
-|:--|:--|:--|:--|
-| **THCA** | CBGA | THCA synthase | MEP → GPP → CBGA → THCA |
-| **CBDA** | CBGA | CBDA synthase | MEP → GPP → CBGA → CBDA |
-| **CBGA** | OA + GPP | GOT (aromatic PT) | PKS → OA; MEP → GPP |
-| **CBCA** | CBGA | CBCA synthase | MEP → GPP → CBGA → CBCA |
-| **CBG** | CBGA | (decarboxylation) | Non-enzymatic from CBGA |
-
-### Gene Families of Interest
-
-- **TPS** — Terpene synthase superfamily (TPS-a, TPS-b, TPS-g subfamilies)
-- **CYP450** — Cytochrome P450 oxidases involved in terpene modification
-- **THCAS / CBDAS / CBCAS** — Cannabinoid oxidocyclases (FAD-dependent BBE-like)
-- **OAC / OLS** — Olivetol/olivetolic acid cyclase and synthase (polyketide pathway)
-- **GOT** — Geranylpyrophosphate:olivetolate geranyltransferase (aromatic prenyltransferase)
-- **MEP pathway** — DXS, DXR, and downstream enzymes providing GPP precursor
-
----
-
-## 🏗️ Architecture
-
-```mermaid
-flowchart LR
-    A["🌐 Public Data<br/>(NCBI, ENA, Zenodo)"] --> B["📥 Ingestion<br/>cannaomics.ingest"]
-    B --> C["🔧 Normalization<br/>cannaomics.normalize"]
-    C --> D["🏷️ Annotation<br/>cannaomics.annotate"]
-    D --> E["📐 Feature Engineering<br/>cannaomics.features"]
-    E --> F["🤖 ML Models<br/>cannaomics.ml"]
-    F --> G["🔍 Interpretability<br/>SHAP · Feature Importance"]
-    G --> H["📊 Candidate Ranking<br/>cannaomics.rank"]
-    H --> I["📋 Report Generation<br/>HTML · PDF · CSV"]
-
-    style A fill:#1a1a2e,stroke:#e94560,color:#fff
-    style B fill:#16213e,stroke:#0f3460,color:#fff
-    style C fill:#16213e,stroke:#0f3460,color:#fff
-    style D fill:#16213e,stroke:#0f3460,color:#fff
-    style E fill:#16213e,stroke:#0f3460,color:#fff
-    style F fill:#533483,stroke:#e94560,color:#fff
-    style G fill:#533483,stroke:#e94560,color:#fff
-    style H fill:#0f3460,stroke:#e94560,color:#fff
-    style I fill:#1a1a2e,stroke:#53a653,color:#fff
-```
-
----
-
-## 📊 Example Output
-
-After running the demo pipeline, the results directory will contain:
-
-```
-results/demo/
-├── report.html               # Interactive HTML report
-├── figures/
-│   ├── feature_importance.png # Top-ranked features (SHAP)
-│   ├── correlation_matrix.png # Gene expression × chemotype
-│   └── variant_impact.png     # Variant effect sizes
-├── tables/
-│   ├── candidate_genes.csv    # Ranked gene list with scores
-│   ├── variant_summary.csv    # Annotated variant table
-│   └── model_metrics.csv      # Model performance summary
-└── logs/
-    └── pipeline.log           # Full execution log
-```
-
----
-
-## 🗺️ Roadmap
-
-| Phase | Title | Duration | Status | Key Deliverables |
-|:--:|:--|:--|:--:|:--|
-| **0** | Repository Foundation | 1 week | ✅ | Project scaffold, CI/CD, dev toolchain |
-| **1** | Data Ingestion & Schema | 2 weeks | 🔄 | NCBI/ENA downloaders, Pydantic schemas, manifest system |
-| **2** | Genomics Module | 3 weeks | ⬜ | VCF parsing, variant annotation, gene family mapping |
-| **3** | Transcriptomics Module | 2 weeks | ⬜ | RNA-seq normalization, differential expression, cross-study integration |
-| **4** | Chemistry Module | 2 weeks | ⬜ | GC-MS/HPLC ingestion, compound mapping, chemotype classification |
-| **5** | Feature Integration & ML | 3 weeks | ⬜ | Multi-omic feature matrix, RF/XGBoost models, SHAP explainability |
-| **6** | Reporting & Visualization | 2 weeks | ⬜ | HTML report templates, interactive plots, publication figures |
-| **7** | Validation & Release | 2 weeks | ⬜ | End-to-end tests, documentation site, PyPI release, paper draft |
-
-> See [ROADMAP.md](ROADMAP.md) for detailed deliverables and milestones.
-
----
-
-## 📖 Documentation
-
-| Document | Description |
-|:--|:--|
-| [ROADMAP.md](ROADMAP.md) | Detailed phase-by-phase development plan |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute code, data, or annotations |
-| [CHANGELOG.md](CHANGELOG.md) | Version history and release notes |
-| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards and scientific integrity |
-| [CITATION.cff](CITATION.cff) | How to cite this project |
-| [docs/](docs/) | Full documentation (coming in Phase 7) |
-
----
-
-## 🧪 Development
+Quer ver a mágica acontecendo na sua máquina em menos de 10 segundos? Execute nosso comando de demonstração com dados sintéticos:
 
 ```bash
-# Run tests
-pytest
+cannaomics demo
+```
+**O que vai acontecer?** A CLI irá instanciar variantes genéticas simuladas (como SNPs próximos a *CsTPS1* e *THCAS*), processar as quantificações químicas, treinar um modelo de *Random Forest*, interpretar as predições via SHAP e ejetar um relatório impecável no diretório `results/demo_run/`.
 
-# Run tests with coverage
-pytest --cov=cannaomics --cov-report=html
+---
 
-# Lint and format
-ruff check .
-ruff format .
+## 🔬 Escopo Científico
 
-# Type checking
-mypy cannaomics/
+O CannaOmics AI foca na elucidação dos determinantes genéticos de dois grandes grupos metabólicos:
+
+| 🌸 **Terpenos Alvo** | 🌿 **Canabinoides Alvo** | 🧬 **Famílias Gênicas Base** |
+|:---|:---|:---|
+| β-mirceno | THC / THCA | *CsTPS* (Terpeno Sintases) |
+| Limoneno | CBD / CBDA | *OAC* (Ácido Olivetólico Ciclase) |
+| α/β-pineno | CBC / CBCA | *THCAS* (THCA Sintase) |
+| β-cariofileno | CBG / CBGA | *CBDAS* (CBDA Sintase) |
+| Terpinoleno | THCV / CBDV | Vias MEP / MEV (*DXS, HMGR*) |
+
+---
+
+## 🏗️ Arquitetura
+
+O coração do pipeline flui através de uma arquitetura limpa de processamento de dados biológicos.
+
+```mermaid
+flowchart TD
+    subgraph Dados ["Input de Dados (YAML)"]
+        VCF[Matriz de Variantes\n.vcf / .parquet]
+        CHEM[Perfil Químico\n.csv]
+        META[Metadados\n.csv]
+    end
+
+    subgraph Core ["Engine CannaOmics"]
+        NORM[Normalização de Compostos]
+        CHEMO[Classificação Quimiotípica]
+        GEN[Anotação de Genes / SNPs]
+        FEAT[Construção da Matriz de Features]
+    end
+
+    subgraph ML ["Machine Learning"]
+        TRAIN[Treinamento de Modelos]
+        EVAL[Avaliação (CV)]
+        SHAP[Interpretabilidade (SHAP)]
+    end
+
+    subgraph Output ["Insights Biológicos"]
+        RANK[Raking de Candidatos]
+        REP[Relatório em Markdown]
+    end
+
+    VCF --> GEN
+    CHEM --> NORM --> CHEMO
+    GEN --> FEAT
+    CHEMO --> FEAT
+    META --> FEAT
+    
+    FEAT --> TRAIN --> EVAL --> SHAP
+    SHAP --> RANK --> REP
 ```
 
 ---
 
-## 📄 Citation
+## 🗺️ Roadmap de Desenvolvimento
 
-If you use CannaOmics AI in your research, please cite:
+Nós dividimos a expansão do CannaOmics AI em fases modulares para garantir integridade científica.
 
-```bibtex
-@software{caramaschi2025cannaomics,
-  author    = {Caramaschi, Sylvian},
-  title     = {CannaOmics AI: Open-source framework for reproducible
-               Cannabis sativa genotype-to-chemotype analysis},
-  year      = {2025},
-  url       = {https://github.com/caramaschiHG/CannaOmics-ai},
-  license   = {Apache-2.0}
-}
-```
-
-Or use the metadata in [`CITATION.cff`](CITATION.cff).
+| Fase | Título | Status | Objetivo Principal |
+|:---:|:---|:---:|:---|
+| **0** | **Fundação e Estrutura MVP** | ✅ | Esqueleto do CLI, infraestrutura de classes, demo pipeline mockada. |
+| **1** | **Ingestão Genômica (VCF/BED)** | 🔄 | Parser eficiente de variantes genéticas e metadados; integração básica biopython/scikit-allel. |
+| **2** | **Ingestão Química e Quimiotipos** | ⬜ | Módulo para perfis químicos (*Watts 2021*) e categorização por dominância e thresholds. |
+| **3** | **Matriz de Features e Limpeza** | ⬜ | Alinhamento e integração das matrizes químicas e genéticas (lidar com missing data). |
+| **4** | **Treinamento e Avaliação de Modelos** | ⬜ | Pipeline de Machine Learning para prever um alvo químico usando Random Forest/Logistic Regression. |
+| **5** | **Interpretabilidade (SHAP e Permutation)** | ⬜ | Analisar quais variantes (SNPs em TPS, etc.) foram essenciais para o modelo. |
+| **6** | **Geração de Relatório** | ⬜ | Relatório Markdown consolidando métricas, features candidatas e distribuição de dados. |
+| **7** | **Revisão e Documentação Final** | ⬜ | Refinamento de código, testes unitários para a pipeline completa e publicação das releases. |
 
 ---
 
-## 🤝 Credits
+## 🤝 Créditos & Visão
 
-This project was born from a powerful scientific intuition:
+Este projeto nasceu de uma forte intuição científica:
+> *Se a literatura científica atual consegue identificar marcadores genéticos atrelados a perfis químicos complexos, nós podemos transformar esses métodos em software open-source hiper-reprodutível e usar IA para revelar os padrões escondidos.*
 
-> *If published research can identify genetic signals tied to chemical profiles, we can turn those methods into reproducible software and use AI to generate new, testable hypotheses.*
-
-**Conceptual spark:** Leon  
-**AI architecture, bioinformatics pipeline & open-source implementation:** Sylvian Caramaschi
-
----
-
-## ⚖️ License
-
-CannaOmics AI is released under the [Apache License 2.0](LICENSE).
-
-You are free to use, modify, and distribute this software for any purpose — including commercial use — provided you include the original license and attribution.
+- **Faísca conceitual:** Leon 
+- **Arquitetura de IA, Pipeline de Bioinformática & Desenvolvimento Open-source:** Sylvian Caramaschi
 
 ---
 
 <div align="center">
-
-> *CannaOmics AI is not a black box. It is a reproducible research framework for generating testable hypotheses about Cannabis genotype-to-chemotype relationships.*
-
-**Built with 🧬 for open science.**
-
+<i>"CannaOmics AI não é uma caixa-preta. É um instrumento de iluminação sobre a relação entre genótipo e quimiotipo."</i><br><br>
+<b><a href="LICENSE">Apache License 2.0</a></b> | Copyright 2026 Sylvian Caramaschi
 </div>
